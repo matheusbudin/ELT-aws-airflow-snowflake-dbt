@@ -189,8 +189,82 @@ Para conectar ao Looker Studio / PowerBi será necessário ter essa informação
 - Tendo sua EC2 já instanciada e com a URL do airflow já disponível para ser acessada por exemplo:
 `http://ec2-35-175-126-189.compute-1.amazonaws.com:8080/`
 
+- No menu canto superior direito clique em conexões, criar.
+
+- Conexão para integrar com o Postgres On premises:
+```
+connection id: postgres
+login: etlreadonly
+host: 159.223.187.110
+database: novadrive
+password: novadrive376A@
+port: 5432
+
+```
+
+- Conexão Airflow-Snowflake:
+```
+connection id: snowflake
+schema: STAGE
+login: <seu login>
+account: XXXXX-YYYYY
+password: <sua-senha-snowflake>
+database: NOVADRIVE
+warehouse: DEFAULT_WH
 
 
+```
+
+# Levando o código da nossa dag, que está na pasta `./dag`
+- Salientando que o ideal seria um processo de CI/CD, como não é o foco deste estudo de caso, vamos levar o código da DAG através do Editor Nano e do git bash (terminal) já conectado à EC2.
+- Digite o comando :  `touch dag.py`;
+- Edite : `nano dag.py`;
+- Copiar o código da dag no VsCode para o editor nano (no terminal bash);
+- Control + X para salvar;
+- digite: `cat dag.py` para verificar se o código foi salvo na dag do container.
 
 
+# DBT:
+Ferramenta utilizada para a modelagem de dados dimensional, construção das tabelas fato e dimensão.
+
+- Crie uma conta;
+- A própria ferramenta vai se guiar para criar um `enviroment` e um `projeto`;
+- Selecione o conector Snowflake;
+- Dê next até entrar na `DBT cloud IDE`;
+- Observe a estrutura de pastas e arquivos e clique para editar a file `dbt_project.yml`:
+Altere apenas o nome do projeto conforme a necessidade.
+- Clique na pasta Models:
+Esta pasta vai ser muito importante pois conterá os scripts para modelagem das tabelas.
+
+- Crie o arquivo `source.yml`:
+```
+version: 2
+
+sources:
+  - name: sources
+    database: NOVADRIVE
+    schema: STAGE
+    tables:
+      - name: cidades
+      - name: clientes
+      - name: concessionarias
+      - name: estados
+      - name: veiculos
+      - name: vendas
+      - name: vendedores
+
+```
+- separe dentro da pasta models, as pastas referentes à cada transformação: `stage`, `dimensions`, `facts`, `analysis`. Consulte a pasta `./dbt/models` deste repositório para encontrar os códigos referentes à cada processo.
+
+- Stage é a camada "raw/crua" das tabelas que vêm do Postgres, no DBT foi feita uma materialização do tipo View para ser a base da criação das outras tabelas.
+
+- Dimensions e Fact: são as tabelas do Star Schema para modelagem dimensional e geração de valor no negócio.
+
+- Analysis: são as tabelas modeladas especificamente para atender e responder as questões de negócios levantadas nos primeiros tópicos desta documentação. Foi feito dessa forma para simplificar o relacionamento das tabelas nas ferramentas de BI. Entretanto, seria perfeitamente possível realizar a mesma análise apenas com as tabelas fato e dimensão. Porém seria necessário ter um nivel de atenção no relacionamento das tabelas na ferramenta de BI, para não criar "cartesianos" ou "muitos para muitos" prejudicando a integridade do relatório.
+
+- Para rodar os modelos e já "enxergar no snowflake" as tabelas, basta clicar na CLI do prórpio DBT IDE e escrever: 
+`dbt run`
+
+- Antes de realizar o deploy, é interessante realizar um test de data quality e data integrity. Na pasta tests do dbt cria um arquivo chamado test.sql que está neste repositório na pasta `./tests`. Rode o teste com o comando:
+`dbt test`
 
