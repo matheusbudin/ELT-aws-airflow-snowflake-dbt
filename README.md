@@ -265,6 +265,19 @@ sources:
 - Para rodar os modelos e já "enxergar no snowflake" as tabelas, basta clicar na CLI do prórpio DBT IDE e escrever: 
 `dbt run`
 
+>>>IMAGEM SNOWFLAKE TABELAS<<<
+
 - Antes de realizar o deploy, é interessante realizar um test de data quality e data integrity. Na pasta tests do dbt cria um arquivo chamado test.sql que está neste repositório na pasta `./tests`. Rode o teste com o comando:
 `dbt test`
+
+- É possivel consultar a linhagem dos dados clicando em cada arquivo no DBT, por exemplo a linhagem da tabela fato mostra o projeto completo:
+
+>>>Imagem linhagem de dados<<<
+
+# Criação do Dashboard:
+
+Nota pessoal, o conector do pwoer bi para snowflake tem apresentado muitos problemas, o app do power bi tem resultado em diversos "crashes" ao realizar a conexão. Portanto, uma solução paleativa, gratuita, foi usar o Google Looker Studio (gratuito) e então foi feito o dashboard abaixo, que trás informações de vendas de carros por concessionárias, sendo possível filtrar por estado e por concessionária:
+
+
+>>>IMAGEM dashboard<<<
 
