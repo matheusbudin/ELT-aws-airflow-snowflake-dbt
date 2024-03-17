@@ -20,6 +20,10 @@
 - Conta no Snowflake (possui $400 doláres de free tier);
 - Conta na google (para utilizar o Looker como ferramenta de BI).
 
+## Arquitetura
+
+>>>Imagem arquitetura<<<
+
 ## Banco de dados Postgres exemplo para conexão (mudar de acordo com o que você tiver):
 
 host: 159.223.187.110
