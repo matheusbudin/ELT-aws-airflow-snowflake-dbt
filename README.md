@@ -91,6 +91,104 @@ sudo docker compose up -d
 sudo docker ps
 
 ```
+- O próximo passo seria criar as conexões, entretanto é necessário ter o seu ambiente no data warehouse criado, podendo ser da sua escolha como: AWS redshift, GCP Big Query, Azure Fabric/Synapse ou Snowflake que foi a ferramenta escolhida para este estudo de caso.
+
+
+# Configuração Snowflake:
+Assumindo que você já tenha uma conta no snowflake, o próximo passo é preparar o ambiente para consumir a ingestão dos dados que virá do airflow.
+
+Abra um editor de código do snowflake, digite os códigos abaixo e clique em "run all". Os códigos abaixo tem o papel de criar um database, um schema, e a definição das tabelas que são ingeridas pelo airflow.
+```
+create database novadrive;
+create schema stage;
+ 
+CREATE WAREHOUSE DEFAULT_WH;
+ 
+CREATE TABLE veiculos (
+    id_veiculos INTEGER,
+    nome VARCHAR(255) NOT NULL,
+    tipo VARCHAR(100) NOT NULL,
+    valor DECIMAL(10, 2) NOT NULL,
+    data_atualizacao TIMESTAMP_LTZ,
+    data_inclusao TIMESTAMP_LTZ
+);
+ 
+CREATE TABLE estados (
+    id_estados INTEGER,
+    estado VARCHAR(100) NOT NULL,
+    sigla CHAR(2) NOT NULL,
+    data_inclusao TIMESTAMP_LTZ,
+    data_atualizacao TIMESTAMP_LTZ
+);
+ 
+CREATE TABLE cidades (
+    id_cidades INTEGER,
+    cidade VARCHAR(255) NOT NULL,
+    id_estados INTEGER NOT NULL,
+    data_inclusao TIMESTAMP_LTZ,
+    data_atualizacao TIMESTAMP_LTZ
+ 
+);
+ 
+CREATE TABLE concessionarias (
+    id_concessionarias INTEGER,
+    concessionaria VARCHAR(255) NOT NULL,
+    id_cidades INTEGER NOT NULL,
+    data_inclusao TIMESTAMP_LTZ,
+    data_atualizacao TIMESTAMP_LTZ
+);
+ 
+CREATE TABLE vendedores (
+    id_vendedores INTEGER,
+    nome VARCHAR(255) NOT NULL,
+    id_concessionarias INTEGER NOT NULL,
+    data_inclusao TIMESTAMP_LTZ,
+    data_atualizacao TIMESTAMP_LTZ
+);
+ 
+CREATE TABLE clientes (
+    id_clientes INTEGER,
+    cliente VARCHAR(255) NOT NULL,
+    endereco TEXT NOT NULL,
+    id_concessionarias INTEGER NOT NULL,
+    data_inclusao TIMESTAMP_LTZ,
+    data_atualizacao TIMESTAMP_LTZ
+);
+ 
+CREATE TABLE vendas (
+    id_vendas INTEGER,
+    id_veiculos INTEGER NOT NULL,
+    id_concessionarias INTEGER NOT NULL,
+    id_vendedores INTEGER NOT NULL,
+    id_clientes INTEGER NOT NULL,
+    valor_pago DECIMAL(10, 2) NOT NULL,
+    data_venda TIMESTAMP_LTZ,
+    data_inclusao TIMESTAMP_LTZ,
+    data_atualizacao TIMESTAMP_LTZ
+);
+
+
+```
+
+Durante esse estudo de caso você vai precisar ter as informações destacadas abaixo para avançar no tutorial, como credenciais, nome de database, nome do schema, etc.
+
+Login: <vai ser unico para cada pessoa, ao criar a conta guarde o seu login>
+Password: < unico para cada pessoa >
+database: NOVADRIVE (comum à todos)
+warehouse: DSEFAULT_DW (comum à todos)
+schema: STAGE (comum à todos)
+account: `https://app.snowflake.com/XXXXX/YYYYY/worksheets` este é o formato comum da sua URL, sua account vai ser XXXXX-YYYYY.
+ 
+Para conectar ao Looker Studio / PowerBi será necessário ter essa informação também:
+`XXXXX-YYYYY.snowflakecomputing.com`
+
+- Tendo o snowflake ou sua ferramenta de Data Warehouse configurada, vamos voltar e criar as conexões no airflow, essas conexões são importantes pois vão realizar a integração do Airflow com Snowflake.
+
+# Criando Conexões no Airflow:
+
+- Tendo sua EC2 já instanciada e com a URL do airflow já disponível para ser acessada por exemplo:
+`http://ec2-35-175-126-189.compute-1.amazonaws.com:8080/`
+
 
 
 
