@@ -20,9 +20,15 @@
 - Conta no Snowflake (possui $400 doláres de free tier);
 - Conta na google (para utilizar o Looker como ferramenta de BI).
 
+
 ## Arquitetura
 
 ![Arquitetura](https://github.com/matheusbudin/aws-airflow-snowflake-dbt/blob/main/ImagesForReadme/arquitetura.png)
+
+
+## Modelagem de dados dimensional proposta:
+
+![StarSchema](https://github.com/matheusbudin/aws-airflow-snowflake-dbt/blob/main/ImagesForReadme/star_schema_relacionamento.png)
 
 
 ## Banco de dados Postgres exemplo para conexão (mudar de acordo com o que você tiver):
@@ -261,10 +267,6 @@ sources:
       - name: veiculos
       - name: vendas
       - name: vendedores
-
-- Modelagem proposta (Star Schema):
-
-![StarSchema](https://github.com/matheusbudin/aws-airflow-snowflake-dbt/blob/main/ImagesForReadme/star_schema_relacionamento.png)
 
 ```
 - separe dentro da pasta models, as pastas referentes à cada transformação: `stage`, `dimensions`, `facts`, `analysis`. Consulte a pasta `./dbt/models` deste repositório para encontrar os códigos referentes à cada processo.
