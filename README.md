@@ -22,7 +22,7 @@
 
 ## Arquitetura
 
-![Arquitetura](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![Arquitetura](https://github.com/matheusbudin/aws-airflow-snowflake-dbt/blob/main/ImagesForReadme/arquitetura.png)
 
 
 ## Banco de dados Postgres exemplo para conexão (mudar de acordo com o que você tiver):
@@ -33,6 +33,10 @@ user: etlreadonly
 password: novadrive376A@
 
 Com essas informações você já consegue conectar ao Postgres de exemplo com a ferramenta PgAdmin4 e realizar querys para consultar as tabelas de origem.
+
+Estrutura de tabelas na origem (pgadmin):
+
+![OnPremises](https://github.com/matheusbudin/aws-airflow-snowflake-dbt/blob/main/ImagesForReadme/database_origem.png)
 
 # Orquestrador: Apache Airflow
 
@@ -258,6 +262,10 @@ sources:
       - name: vendas
       - name: vendedores
 
+- Modelagem proposta (Star Schema):
+
+![StarSchema](https://github.com/matheusbudin/aws-airflow-snowflake-dbt/blob/main/ImagesForReadme/star_schema_relacionamento.png)
+
 ```
 - separe dentro da pasta models, as pastas referentes à cada transformação: `stage`, `dimensions`, `facts`, `analysis`. Consulte a pasta `./dbt/models` deste repositório para encontrar os códigos referentes à cada processo.
 
@@ -270,19 +278,19 @@ sources:
 - Para rodar os modelos e já "enxergar no snowflake" as tabelas, basta clicar na CLI do prórpio DBT IDE e escrever: 
 `dbt run`
 
->>>IMAGEM SNOWFLAKE TABELAS<<<
+![DataWarehouse](https://github.com/matheusbudin/aws-airflow-snowflake-dbt/blob/main/ImagesForReadme/snowflake_DW_completo.png)
 
 - Antes de realizar o deploy, é interessante realizar um test de data quality e data integrity. Na pasta tests do dbt cria um arquivo chamado test.sql que está neste repositório na pasta `./tests`. Rode o teste com o comando:
 `dbt test`
 
 - É possivel consultar a linhagem dos dados clicando em cada arquivo no DBT, por exemplo a linhagem da tabela fato mostra o projeto completo:
 
->>>Imagem linhagem de dados<<<
+![DataLineage](https://github.com/matheusbudin/aws-airflow-snowflake-dbt/blob/main/ImagesForReadme/data_lineage_dbt.png)
 
 # Criação do Dashboard:
 
 Nota pessoal, o conector do pwoer bi para snowflake tem apresentado muitos problemas, o app do power bi tem resultado em diversos "crashes" ao realizar a conexão. Portanto, uma solução paleativa, gratuita, foi usar o Google Looker Studio (gratuito) e então foi feito o dashboard abaixo, que trás informações de vendas de carros por concessionárias, sendo possível filtrar por estado e por concessionária:
 
 
->>>IMAGEM dashboard<<<
+![Dashboard](https://github.com/matheusbudin/aws-airflow-snowflake-dbt/blob/main/ImagesForReadme/dashboard_looker_studio.png)
 
