@@ -1,4 +1,3 @@
-# aws-airflow-snowflake-dbt
 
 # ELT Pipeline - Marca de Carros - Vendas e análises
 
@@ -78,6 +77,20 @@ Cole esse comando em um terminal, por exemplo git-bash. Entretanto, você tem qu
 - Aguardar os containers entrarem no status "Healthy" você pode realizar essa chegagem via terminal com o comando:
 `sudo docker ps`
 
+- Assim que todos os containers estiverem com o status Healthy, você pode acessar o airflow copiando o nome da sua EC2 e adicionando `:8080`em um navegador de sua preferência:
+`http://ec2-35-175-126-189.compute-1.amazonaws.com:8080/`
+
+- O proximo passo não é mandatório, mas deixa o seu ambiente no airflow mais "clean", no caso vamos marcar a opção de FALSE para que ele não suba os exemplos nativos, editandop o docker-compose.yaml. Digite o comando abaixo, procure por "AIRFLOW__CORE__LOAD_EXAMPLES='true'" e troque por false, utilizando o editor nano:
+`nano /home/ubuntu/docker-compose.yaml`
+
+- reinicie o seu airflow:
+```
+#reiniciar
+sudo docker compose stop
+sudo docker compose up -d
+sudo docker ps
+
+```
 
 
 
