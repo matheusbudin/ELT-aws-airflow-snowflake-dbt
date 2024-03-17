@@ -22,7 +22,8 @@
 
 ## Arquitetura
 
->>>Imagem arquitetura<<<
+![Arquitetura](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+
 
 ## Banco de dados Postgres exemplo para conexão (mudar de acordo com o que você tiver):
 
